@@ -1,54 +1,48 @@
-'use strict';
+const path = require('path')
+const fs = require('fs')
 
-var SVGSpriter = require('svg-sprite'),
-    path = require('path'),
-    mkdirp = require('mkdirp'),
-    fs = require('fs'),
-    glob = require('glob'),
-    _ = require('lodash');
-
+const mkdirp = require('mkdirp')
+const glob = require('glob')
+const SVGSpriter = require('svg-sprite')
 
 function SVGSprites(options) {
-    this.options = options || {};
+  this.options = options || {}
 }
-
 
 SVGSprites.prototype.apply = function (compiler) {
+  function _process(bundle, {log, src}) {
+    return function (err, files) {
+      if (err) {
+        throw err
+      }
 
-    var self = this;
+      const config = Object.assign({}, {log, src}, bundle)
+      const spriter = new SVGSpriter(config)
 
-    compiler.plugin('compile', function () {
+      files.forEach(file => {
+        // Create and add file instance for each SVG
+        spriter.add(path.resolve(file), file, fs.readFileSync(path.resolve(file), {encoding: 'utf-8'}))
+      })
 
-        for (var bundle in self.options['sprites_conf']) {
-            var retfunc = function (bundle, local_conf) {
-                return function (err, files) {
+      // Compile the sprite
+      spriter.compile((error, result) => {
+        Object.keys(result).forEach(mode => {
+          Object.keys(result[mode]).forEach(type => {
+            const data = result[mode][type]
 
-                    let local_conf = _.merge(self.options, self.options['sprites_conf'][bundle]);
-                    let spriter = new SVGSpriter(local_conf)
+            mkdirp.sync(path.dirname(data.path))
+            fs.writeFileSync(data.path, data.contents)
+          })
+        })
+      })
+    }
+  }
 
-                    files.forEach(function (file) {
-                        // Create and add file instance for each SVG
-                        spriter.add(path.resolve(file), file, fs.readFileSync(path.resolve(file), {encoding: 'utf-8'}));
-                    });
-
-                    // Compile the sprite
-                    spriter.compile(function (error, result, data) {
-                        for (var mode in result) {
-                            for (var type in result[mode]) {
-                                mkdirp.sync(path.dirname(result[mode][type].path));
-                                fs.writeFileSync(result[mode][type].path, result[mode][type].contents);
-                            }
-                        }
-
-                    });
-                }
-            }
-
-            glob.glob(self.options.src + bundle + '**/*.svg', retfunc(bundle))
-        }
-        ;
-    });
-
+  compiler.plugin('compile', () => {
+    Object.keys(this.options.bundles).forEach(key => {
+      glob.glob(`${this.options.src || ''}${key}/**/*.svg'`, _process(this.options.bundles[key], this.options))
+    })
+  })
 }
 
-module.exports = SVGSprites;
+module.exports = SVGSprites

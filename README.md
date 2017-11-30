@@ -1,6 +1,7 @@
-# svg-sprite-plugin
+# svg-sprite-plugin-fork
 
-Webpack plugin based on [svg-sprite](http://jkphl.github.io/svg-sprite)
+Webpack plugin based on [svg-sprite](http://jkphl.github.io/svg-sprite).
+Fork of [svg-sprite-plugin](https://www.npmjs.com/package/svg-sprite-plugin).
 
 ## Usage
 
@@ -12,23 +13,23 @@ module.exports = {
     new SVGSprites({
       src: 'public/image/svg_icons/',
       log: 'verbose',
-      sprites_conf: {
+      bundles: {
         'sprite-1': {
            mode: {
              defs: {
                dest: path.resolve('svg_sprites/sprite-dest-1/defs'),
                sprite: 'sprite.svg',
-               example: true,
-           },
+               example: true
+           }
         },
         'sprite-2': {
            mode: {
              defs: {
                dest: path.resolve('svg_sprites/sprite-dest-2/defs'),
                sprite: 'sprite.svg',
-               example: true,
-           },
-        },
+               example: true
+           }
+        }
       }
     })
   ]

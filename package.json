@@ -8,6 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "glob": "7.1.2",
+    "mkdirp": "0.5.1",
     "svg-sprite": "1.3.7"
   },
   "devDependencies": {
@@ -25,6 +27,10 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/tvardy/svg-sprite-plugin-fork.git"
+  },
+  "xo": {
+    "space": true,
+    "semicolon": false
   },
   "license": "MIT"
 }
