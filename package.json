@@ -1,0 +1,31 @@
+{
+  "name": "svg-sprite-plugin-fork",
+  "version": "0.0.1",
+  "description": "Webpack plugin based on svg-sprite. (Fork of https://www.npmjs.com/package/svg-sprite-plugin)",
+  "main": "index.js",
+  "scripts": {
+    "lint": "xo --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "svg-sprite": "1.3.7"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "2.1.0",
+    "release-commit": "1.0.2",
+    "svg-sprite-plugin": "0.0.1",
+    "xo": "0.18.2"
+  },
+  "keywords": [],
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "author": "Greg Twardowski (https://github.com/tvardy)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tvardy/svg-sprite-plugin-fork.git"
+  },
+  "license": "MIT"
+}
