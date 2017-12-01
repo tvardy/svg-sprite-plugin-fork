@@ -1,6 +1,6 @@
 {
   "name": "svg-sprite-plugin-fork",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Webpack plugin based on [svg-sprite](http://jkphl.github.io/svg-sprite). Fork of [svg-sprite-plugin](https://www.npmjs.com/package/svg-sprite-plugin)",
   "main": "index.js",
   "scripts": {
