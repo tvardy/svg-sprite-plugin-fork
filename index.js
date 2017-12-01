@@ -10,7 +10,7 @@ function SVGSprites(options) {
 }
 
 SVGSprites.prototype.apply = function (compiler) {
-  function _process(bundle, {log, src}) {
+  function _process(bundle, {log, src, dest}) {
     return function (err, files) {
       if (err) {
         throw err
@@ -21,17 +21,22 @@ SVGSprites.prototype.apply = function (compiler) {
 
       files.forEach(file => {
         // Create and add file instance for each SVG
-        spriter.add(path.resolve(file), file, fs.readFileSync(path.resolve(file), {encoding: 'utf-8'}))
+        spriter.add(path.resolve(file), null, fs.readFileSync(path.resolve(file), {encoding: 'utf-8'}))
       })
 
       // Compile the sprite
-      spriter.compile((error, result) => {
+      spriter.compile((err, result) => {
+        if (err) {
+          throw err
+        }
+
         Object.keys(result).forEach(mode => {
+          const _dest = path.resolve(compiler.outputPath, dest, mode)
+          mkdirp.sync(_dest)
+
           Object.keys(result[mode]).forEach(type => {
             const data = result[mode][type]
-
-            mkdirp.sync(path.dirname(data.path))
-            fs.writeFileSync(data.path, data.contents)
+            fs.writeFileSync(path.join(_dest, path.parse(data.path).base), data.contents)
           })
         })
       })
