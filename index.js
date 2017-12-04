@@ -45,7 +45,7 @@ SVGSprites.prototype.apply = function (compiler) {
 
   compiler.plugin('compile', () => {
     Object.keys(this.options.bundles).forEach(key => {
-      glob.glob(`${this.options.src || ''}${key}/**/*.svg'`, _process(this.options.bundles[key], this.options))
+      glob(`${this.options.src || ''}${key}/**/*.svg`, { stat: true }, _process(this.options.bundles[key], this.options))
     })
   })
 }
